@@ -18,7 +18,7 @@
 #
 
 case node[:platform]
-when "debian","ubuntu", "gentoo"
+when "centos","debian","ubuntu","gentoo"
   execute "start-runsvdir" do
     command value_for_platform(
       "debian" => { "default" => "runsvdir-start" },
@@ -41,12 +41,17 @@ when "debian","ubuntu", "gentoo"
     end
   end
 
+  if platform? "centos"
+    include_recipe "yumrepo::annvix"
+  end
+
   package "runit" do
     action :install
     if platform?("ubuntu", "debian")
       response_file "runit.seed"
     end
     notifies value_for_platform(
+      "centos" => { "default" => :nothing },
       "debian" => { "4.0" => :run, "default" => :nothing  },
       "ubuntu" => {
         "default" => :nothing,

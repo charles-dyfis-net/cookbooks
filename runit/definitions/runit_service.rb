@@ -156,4 +156,15 @@ define :runit_service, :directory => nil, :only_if => false, :finish_script => f
     action :nothing
   end
 
+  sv_name = params[:name]
+  logged_file "#{sv_dir_name}/log/main/current" do
+    tag "sv-#{sv_name}"
+  end
+
+  link "/var/log/sv-#{sv_name}" do
+    to "#{sv_dir_name}/log/main"
+  end
+
 end
+
+# vim: ai et sts=2 sw=2 ts=2
