@@ -9,6 +9,8 @@ recipe "yumrepo::epel", "Installs Fedora Extra Packages for Enterprise Linux (EP
 recipe "yumrepo::elff", "Installs Enterprise Linux Fast Forward (ELFF) repository"
 recipe "yumrepo::dell", "Installs Dell (OpenManage) repository"
 recipe "yumrepo::vmware-tools", "Installs VMware (vmware-tools) repository"
+recipe "yumrepo::annvix", "Installs Annvix repository"
+recipe "yumrepo::pgdg90", "Installs PostgreSQL 9.0 upstream repository"
 
 %w{ redhat centos }.each do |os|
   supports os, ">= 5"

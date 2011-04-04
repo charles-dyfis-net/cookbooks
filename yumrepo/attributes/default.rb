@@ -31,16 +31,16 @@ default[:repo][:dell][:omsa_independent_url] = "http://linux.dell.com/repo/hardw
 default[:repo][:dell][:omsa_specific_url] = "http://linux.dell.com/repo/hardware/latest/mirrors.cgi?osname=el$releasever&basearch=$basearch&native=1&sys_ven_id=$sys_ven_id&sys_dev_id=$sys_dev_id&dellsysidpluginver=$dellsysidpluginver"
 default[:repo][:dell][:install_optional] = false
 if node[:dmi] and node[:dmi][:system] and node[:dmi][:system][:manufacturer] and node[:dmi][:system][:manufacturer] =~ /dell/i and node[:platform_version].to_f >= 5
-  set[:repo][:dell][:enabled] = true
+  default[:repo][:dell][:enabled] = true
 else 
-  set[:repo][:dell][:enabled] = false
+  default[:repo][:dell][:enabled] = false
 end
 
 # VMware
 default[:repo][:vmware][:release] = "4.1"
 default[:repo][:vmware][:install_optional] = false
 if node[:dmi] and node[:dmi][:system] and node[:dmi][:system][:manufacturer] and node[:dmi][:system][:manufacturer] =~ /vmware/i and node[:platform_version].to_f >= 5
-  set[:repo][:vmware][:enabled] = true
+  default[:repo][:vmware][:enabled] = true
 else
-  set[:repo][:vmware][:enabled] = false
+  default[:repo][:vmware][:enabled] = false
 end

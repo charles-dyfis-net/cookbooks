@@ -28,6 +28,8 @@ define :yumrepo,
     :url_is_mirrorlist => false,
     :action => :enable do
 
+  include_recipe "yumrepo::common"
+
   if node[:repo].has_key? params[:name] and node[:repo][params[:name]][:url] then
     url = node[:repo][params[:name]][:url]
   else
@@ -40,9 +42,14 @@ define :yumrepo,
       return
     end
     if params[:key] then
-      yumkey "#{params[:key]}"
+      keyname = params[:key]
+      yumkey keyname
     end
-    template "/etc/yum.repos.d/#{params[:name]}.repo" do
+    makecache = execute "yum clean all" do
+      action :nothing
+      not_if "test \"$(find /etc/yum.repos.d /etc/pki/rpm-gpg -newer /var/cache/yum -print -quit | wc -l)\" -eq 0"
+    end
+    r = template "/etc/yum.repos.d/#{params[:name]}.repo" do
       source params[:templatesource]
       variables({
         :shortname => params[:name],
@@ -51,11 +58,10 @@ define :yumrepo,
         :key_filename => params[:key],
         :use_mirrorlist => params[:url_is_mirrorlist]
       })
-      notifies :run, "execute[yum -q makecache]", :immediately
-    end
-    execute "yum -q makecache" do
       action :nothing
     end
+    r.run_action("create")
+    makecache.run_action("run")
   else
     file "/etc/yum.repos.d/#{params[:name]}.repo" do
       action :delete
