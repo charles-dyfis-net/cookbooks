@@ -1,0 +1,26 @@
+# http://chrisadams.me.uk/2010/05/10/setting-up-a-centos-base-box-for-development-and-testing-with-vagrant/
+yum -y install bzip2 gcc gcc-c++ make openssl-devel readline-devel sqlite3-devel zlib-devel
+
+mkdir -p /usr/src
+cd /usr/src
+wget ftp://ftp.ruby-lang.org//pub/ruby/1.8/ruby-1.8.7-p334.tar.bz2
+tar -xjf ruby-1.8.7-p334.tar.bz2
+(
+	cd ruby-1.8.7-p334
+	./configure --prefix=/opt/ruby-1.8.7-p334 && make && make install
+	rm -f /opt/ruby && ln -s ruby-1.8.7-p334 /opt/ruby
+)
+
+cd /usr/src
+wget http://production.cf.rubygems.org/rubygems/rubygems-1.6.1.tgz
+tar -xzf rubygems-1.6.1.tgz
+(
+	cd rubygems-1.6.1
+	/opt/ruby/bin/ruby setup.rb
+)
+
+echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/opt_ruby.sh
+
+/opt/ruby/bin/gem install chef --no-ri --no-rdoc
+
+sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
