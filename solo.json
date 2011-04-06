@@ -1,0 +1,4 @@
+{
+	"run_list":["recipe[centos_chef_deploy]"],
+	"cookbook_rpms":{"load_bag_keys":false}
+}

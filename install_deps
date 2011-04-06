@@ -20,7 +20,12 @@ tar -xzf rubygems-1.6.1.tgz
 )
 
 echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/opt_ruby.sh
-
-/opt/ruby/bin/gem install chef --no-ri --no-rdoc
+export PATH="$PATH:/opt/ruby/bin"
 
 sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
+
+# 0.5.8 does not support CentOS Java packages
+/opt/ruby/bin/gem install ./ohai-0.6.0.beta.0.gem
+
+/opt/ruby/bin/gem install chef --no-ri --no-rdoc
+/opt/ruby/bin/chef-solo -j solo.json -c solo.rb
